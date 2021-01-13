@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :chatrooms
       resources :messages
+      resources :users
     end
   end
   mount ActionCable.server => './cable' 
