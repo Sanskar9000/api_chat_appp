@@ -1,26 +1,9 @@
 import './App.css';
 import React from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import Header from './components/Header';
-import { routes } from './routes';
-import { isAuthenticated } from "./utils";
-
-const RenderRoute = (route) => {
-    document.title = route.title;
-    const history = useHistory({});
-    if(route.needAuth && !isAuthenticated()) {
-        history.push("/auth/login");
-    }
-
-    return (
-        <Route  
-            path={route.path} 
-            exact
-            render={(props) => <route.component {...props} />}
-        >
-        </Route>
-    );
-};
+import Login from './components/Login';
+import Register from './components/Register';
 
 class App extends React.Component {
 
@@ -38,18 +21,22 @@ class App extends React.Component {
     }
 
     handleLogout = () => {
-        return null
+        localStorage.removeItem('jwt_token')
+        this.setState({
+          currentUser: null
+        })
+        return <Redirect to='/home' />
     }
 
     render() {
         
         return (
             <div>
+                <Header currentUser={this.state.currentUser} logout={this.handleLogout} />
                 <Switch>
-                    <Header currentUser={this.state.currentUser} logout={this.handleLogout} />
-                    {routes.map((route, index) => {
-                        <RenderRoute key={index} {...route} />
-                    })}
+                    <Route path='/auth/login' component={Login} />
+                    <Route path='/auth/register' component={Register} />
+                    
                 </Switch>
             </div>
           

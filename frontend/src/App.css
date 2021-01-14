@@ -1,3 +1,11 @@
 .App {
   text-align: center;
 }
+
+.form-items {
+  text-align: center;
+  background-color: lightblue;
+  margin-top: 0%;
+  margin-left: 25%;
+  margin-right: 25%;
+}

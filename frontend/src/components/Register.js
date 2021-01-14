@@ -13,13 +13,14 @@ const styles = (theme) => ({
     },
 });
 
-class Login extends React.Component {
+class Register extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = { 
             username: '',
             password: '',
+            password_confirmation: ''
         }
     }
 
@@ -34,14 +35,15 @@ class Login extends React.Component {
     }
     
     render() { 
+
         return ( 
             <div className="form-items">
-                <h1>Login</h1>
+                <h1>Register</h1>
                 <form noValidate autoComplete="off" onSubmit={this.handleSubmit} >
                     <h3>UserName</h3>
                     <TextField 
                         label="UserName" 
-                        variant="outlined" 
+                        variant="outlined"
                         name="username"
                         value={this.state.username}
                         onChange={(e) => this.handleChange(e)}  
@@ -55,6 +57,15 @@ class Login extends React.Component {
                         value={this.state.password}
                         onChange={(e) => this.handleChange(e)}
                     /><br /><br />
+                    <h3>Confirm Password</h3>
+                    <TextField 
+                        label="Confirm Password" 
+                        variant="outlined" 
+                        type="password"
+                        name="password_confirmation"
+                        value={this.state.password_confirmation}
+                        onChange={(e) => this.handleChange(e)}
+                    /><br /><br />
                     <Button variant="contained" color="primary" type="Submit">
                         Submit
                     </Button>
@@ -64,4 +75,4 @@ class Login extends React.Component {
     }
 }
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(Register);
