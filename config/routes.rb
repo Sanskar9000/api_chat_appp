@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       post '/login', to: 'auth#create'
       resources :chatrooms
       resources :messages
-      resources :users
+      resources :users, only: [:create]
     end
   end
   mount ActionCable.server => './cable' 
