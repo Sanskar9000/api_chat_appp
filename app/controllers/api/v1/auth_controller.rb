@@ -5,10 +5,10 @@ class Api::V1::AuthController < ApplicationController
           payload = {'user_id': user.id}
           token = encode(payload)
           render json: {
-              user: UserSerializer.new(user),
+              user: user,
               token: token,
               authenticated: true,
-              user_rooms: ChatroomSerializer.new(user.chatrooms)
+              user_rooms: user.chatrooms
           }
       else 
           render json: {
