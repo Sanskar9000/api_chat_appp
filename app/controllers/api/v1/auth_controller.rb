@@ -1,7 +1,8 @@
 class Api::V1::AuthController < ApplicationController
   def create
-    user = User.find_by(username: params[:username])
-    if user && user.authenticate(params[:password])
+    user = User.find_by(username: auth_params[:username])
+
+    if user && user.authenticate(auth_params[:password])
         payload = {'user_id': user.id}
         token = encode(payload)
         render json: {
@@ -11,10 +12,16 @@ class Api::V1::AuthController < ApplicationController
             user_rooms: user.chatrooms
         }
     else 
-        render json: {
-            message: 'This username/password combination cannot be found',
-            authenticated: false
-        }
+      render json: {
+          message: 'This username/password combination cannot be found',
+          authenticated: false
+      }
     end
+  end
+
+  private
+
+  def auth_params
+    params.require(:user).permit(:username, :password)
   end
 end

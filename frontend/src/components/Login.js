@@ -31,10 +31,10 @@ class Login extends React.Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({
+            body: JSON.stringify({user: {
                 username: this.state.username,
                 password: this.state.password
-            })    
+            }})    
         })
         .then(response => response.json())
         .then(data => {
