@@ -3,6 +3,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
+import { APP_URL } from '../constants';
 
 const styles = (theme) => ({
     root: {
@@ -25,7 +26,7 @@ class Login extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        fetch('http://localhost:3000/api/v1/login', {
+        fetch(`${APP_URL}/api/v1/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
