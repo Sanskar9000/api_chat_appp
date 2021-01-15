@@ -3,6 +3,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
+import { APP_URL } from '../constants';
 
 const styles = (theme) => ({
     root: {
@@ -24,8 +25,29 @@ class Register extends React.Component {
         }
     }
 
-    handleSubmit = () => {
-        return null
+    handleSubmit = (e) => {
+        e.preventDefault()
+        fetch(`${APP_URL}/api/v1/users`, {
+            "method": "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            "body": JSON.stringify({ "user": {
+                "username": this.state.username,
+                "password": this.state.password,
+                "password_confirmation": this.state.password_confirmation
+            }})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.authenticated) {
+                localStorage.setItem('jwt_token', data.token)
+                this.props.updateCurrentUser(data.user)
+            } else {
+                alert('User Registration was not successfull!');
+            } 
+        })
     }
 
     handleChange = (e) => {
