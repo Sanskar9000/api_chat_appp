@@ -55,7 +55,7 @@ const Header = (props) => {
                     }
 
                     {props.currentUser && 
-                        <Button color="inherit">Logout</Button>
+                        <Button color="inherit" onClick={props.logout}>Logout</Button>
                     }
                 </Toolbar>
             </AppBar>
