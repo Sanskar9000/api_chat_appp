@@ -5,8 +5,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       post '/login', to: 'auth#create'
       resources :chatrooms
-      resources :messages
+      resources :messages, only: [:index, :create]
       resources :users, only: [:create]
+      resources :chatrooms, only: [:index, :create, :show]
     end
   end
   mount ActionCable.server => './cable' 
