@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Login from './components/Login';
 import Register from './components/Register';
 import { isAuthenticated } from './utils'
+import ChatLayout from './components/ChatLayout';
 class App extends React.Component {
 
     constructor(props) {
@@ -39,6 +40,9 @@ class App extends React.Component {
             <div>
                 <Header currentUser={this.state.currentUser} logout={this.handleLogout} />
                 <Switch>
+                    <Route exact path='/' render={(props) => {
+                        return <ChatLayout {...props} currentUser={this.state.currentUser} logout={this.state.handleLogout} />
+                    }} />
                     <Route exact path='/auth/login' render={(props) => {
                         return this.state.currentUser && isAuthenticated ?
                         <Redirect to='/' /> :
