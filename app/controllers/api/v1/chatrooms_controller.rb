@@ -10,18 +10,18 @@ class Api::V1::ChatroomsController < ApplicationController
 
     if chatroom.save
       render json: {
-        chatroom_id: chatroom.id
+        chatroom_id: chatroom.id,
         chatroom_title: chatroom.title
       }
     else
-      render json: { message: 'Unable to create chatroom! Please try again.'
+      render json: { message: 'Unable to create chatroom! Please try again.'}
     end
   end
 
   def show
     chatroom = Chatroom.find(params[:id])
     render json: {
-      chatroom_id: chatroom.id
+      chatroom_id: chatroom.id,
       chatroom_title: chatroom.title
     }  
   end
