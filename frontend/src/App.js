@@ -5,7 +5,8 @@ import Header from './components/Header';
 import Login from './components/Login';
 import Register from './components/Register';
 import { isAuthenticated } from './utils'
-import ChatLayout from './components/ChatLayout';
+import ChatLayout from './components/ChatRoom/ChatLayout';
+import CreateRoom from './components/ChatRoom/CreateRoom';
 class App extends React.Component {
 
     constructor(props) {
@@ -14,7 +15,7 @@ class App extends React.Component {
             currentUser: null,
             allRooms: [],
             currentRoom: {
-                room: {}, 
+                chatroom: [], 
                 users: [],
                 messages: []
             }
@@ -25,6 +26,19 @@ class App extends React.Component {
         this.setState({
             currentUser: data
         })
+    }
+
+    updateRooms = (data) => {
+        var rooms = this.state.allRooms;
+        
+        this.setState({
+            ...this.state,
+            allRooms: rooms.concat(data),
+            currentRoom: {
+                chatroom: data.chatroom_id
+            }
+        })
+        debugger
     }
 
     handleLogout = () => {
@@ -40,8 +54,13 @@ class App extends React.Component {
             <div>
                 <Header currentUser={this.state.currentUser} logout={this.handleLogout} />
                 <Switch>
+                    <Route exact path='/chatrooms/create' render={(props) => {
+                        return <CreateRoom {...props} currentUser={this.state.currentUser} updateRooms={this.updateRooms} />
+                    }} />
                     <Route exact path='/' render={(props) => {
-                        return <ChatLayout {...props} currentUser={this.state.currentUser} logout={this.state.handleLogout} />
+                        return this.state.currentUser && isAuthenticated && this.state.currentRoom['room'] !== {} ? 
+                            <ChatLayout {...props} currentUser={this.state.currentUser} logout={this.state.handleLogout} /> :
+                            <Login {...props} updateCurrentUser={this.updateCurrentUser} />
                     }} />
                     <Route exact path='/auth/login' render={(props) => {
                         return this.state.currentUser && isAuthenticated ?

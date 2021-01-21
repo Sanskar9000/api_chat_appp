@@ -32,6 +32,10 @@ const Header = (props) => {
         history.push('/auth/register');
     }
 
+    const handleCreateRoom = () => {
+        history.push('/chatrooms/create')
+    }
+
     return ( 
         <div className={classes.root}>
             <AppBar position="static">
@@ -43,7 +47,7 @@ const Header = (props) => {
                     <Button color="inherit" onClick={() => history.push('/')}>Chat App</Button>
                     </Typography> 
                     {props.currentUser && 
-                        <Button color="inherit">Create Group</Button>
+                        <Button color="inherit" onClick={handleCreateRoom}>Create ChatRoom</Button>
                     }
 
                     {!props.currentUser && 
