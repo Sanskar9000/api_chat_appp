@@ -64,7 +64,7 @@ class Register extends React.Component {
                 <form noValidate autoComplete="off" onSubmit={this.handleSubmit} >
                     <h3>UserName</h3>
                     <TextField 
-                        label="UserName" 
+                        label="Enter User Name" 
                         variant="outlined"
                         name="username"
                         value={this.state.username}
@@ -72,7 +72,7 @@ class Register extends React.Component {
                     />
                     <h3>Password</h3>
                     <TextField 
-                        label="Password" 
+                        label="Enter Password" 
                         variant="outlined" 
                         type="password"
                         name="password"
@@ -81,7 +81,7 @@ class Register extends React.Component {
                     /><br /><br />
                     <h3>Confirm Password</h3>
                     <TextField 
-                        label="Confirm Password" 
+                        label="Re-Enter Password" 
                         variant="outlined" 
                         type="password"
                         name="password_confirmation"
