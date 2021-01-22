@@ -7,6 +7,7 @@ import Register from './components/Register';
 import { isAuthenticated } from './utils'
 import ChatLayout from './components/ChatRoom/ChatLayout';
 import CreateRoom from './components/ChatRoom/CreateRoom';
+import { APP_URL } from './constants';
 class App extends React.Component {
 
     constructor(props) {
@@ -22,8 +23,33 @@ class App extends React.Component {
         }
     }
 
+    componentDidMount() {
+        const { currentRoom: { chatroom } } = this.state;
+
+        fetch(`${APP_URL}/api/v1/chatrooms`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            } 
+        })
+        .then(response => response.json())
+        .then(data => {
+            var roomData = data;
+            this.setState({
+                allRooms: roomData
+            })
+        })
+
+        if(chatroom !== []) {
+            <Redirect to='/' />
+        }
+
+    }
+
     updateCurrentUser = (data) => {
         this.setState({
+            ...this.state,
             currentUser: data
         })
     }
@@ -38,7 +64,6 @@ class App extends React.Component {
                 chatroom: data.chatroom_id
             }
         })
-        debugger
     }
 
     handleLogout = () => {
@@ -54,12 +79,14 @@ class App extends React.Component {
             <div>
                 <Header currentUser={this.state.currentUser} logout={this.handleLogout} />
                 <Switch>
-                    <Route exact path='/chatrooms/create' render={(props) => {
-                        return <CreateRoom {...props} currentUser={this.state.currentUser} updateRooms={this.updateRooms} />
-                    }} />
                     <Route exact path='/' render={(props) => {
                         return this.state.currentUser && isAuthenticated && this.state.currentRoom['room'] !== {} ? 
                             <ChatLayout {...props} currentUser={this.state.currentUser} logout={this.state.handleLogout} /> :
+                            <Login {...props} updateCurrentUser={this.updateCurrentUser} />
+                    }} />
+                    <Route exact path='/chatrooms/create' render={(props) => {
+                        return this.state.currentUser && isAuthenticated ?
+                            <CreateRoom {...props} currentUser={this.state.currentUser} updateRooms={this.updateRooms} /> :
                             <Login {...props} updateCurrentUser={this.updateCurrentUser} />
                     }} />
                     <Route exact path='/auth/login' render={(props) => {

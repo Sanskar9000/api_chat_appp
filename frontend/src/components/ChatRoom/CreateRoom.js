@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { AppBar, Button, Chip, FormControl, Input, InputLabel, MenuItem, Select, Tab, Tabs } from '@material-ui/core';
@@ -45,10 +44,28 @@ class CreateRoom extends React.Component {
         super(props)
         this.state = { 
             roomName: '',
+            users: '',
             currentTab: 0,
-            users: ['Ashwin', 'Pant', 'Jadeja']
+            userName: []
         }
     }
+
+    componentDidMount() {
+        fetch(`${APP_URL}/api/v1/users`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            var users = this.state.users;
+            this.setState({
+                users: data.map((user) => user.username)
+            })
+        })
+    }        
 
     handleSubmit = (e) => {
         e.preventDefault()
@@ -58,9 +75,12 @@ class CreateRoom extends React.Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({chatroom: {
-                title: this.state.roomName,
-            }})    
+            body: JSON.stringify({
+                chatroom: {
+                    title: this.state.roomName,
+                }, 
+                users: this.state.userName
+            })
         })
         .then(response => response.json())
         .then(data => {
@@ -93,50 +113,41 @@ class CreateRoom extends React.Component {
         },
     };
 
-    names = [
-        'Oliver Hansen',
-        'Van Henry',
-        'April Tucker',
-        'Ralph Hubbard',
-        'Omar Alexander',
-        'Carlos Abbott',
-        'Miriam Wagner',
-        'Bradley Wilkerson',
-        'Virginia Andrews',
-        'Kelly Snyder',
-    ];
-
     render() { 
         const { classes } = this.props;
-        
-        console.log('curent tab ===========> ', this.state.currentTab)
+        const { users, currentTab, roomName, userName } = this.state;
+
+        console.log('curent tab ===========> ', currentTab)
+        console.log('username ===========> ', userName)
         return ( 
             <div className="form-items">
                 <h1>Create Room</h1>
-                <AppBar position="static" color='secondary'>
-                    <Tabs value={this.state.currentTab} onChange={this.handleTabChange()} classes={{indicator: classes.tabsIndicator}}>
-                        <Tab label="Private Room" classes={{selected: classes.selected}}/>
+                <AppBar position="static" color='secondary' style={{"min-width": 120}}>
+                    <Tabs value={currentTab} onChange={this.handleTabChange()} classes={{indicator: classes.tabsIndicator}}>
                         <Tab label="Public Room" classes={{selected: classes.selected}}/>
+                        <Tab label="Private Room" classes={{selected: classes.selected}}/>
                     </Tabs>
                 </AppBar>
-                {this.state.currentTab === 0 && 
+                {currentTab === 0 && 
                     <form noValidate autoComplete="off" onSubmit={(e) => this.handleSubmit(e)} >
                         <h3>Enter Room Name</h3>
                         <TextField
                             label="Room Name" 
                             variant="outlined" 
                             name="roomName"
-                            value={this.state.roomName}
+                            value={roomName}
                             onChange={this.handleChange}  
                         />
                         <h3>Select users</h3>
                         <FormControl className={classes.formControl}>
                             <InputLabel id="demo-mutiple-chip-label">User Names</InputLabel>
+                            
                             <Select
                             labelId="demo-mutiple-chip-label"
                             id="demo-mutiple-chip"
+                            name="userName"
                             multiple
-                            value={this.state.users}
+                            value={userName}
                             onChange={this.handleChange}
                             input={<Input id="select-multiple-chip" />}
                             renderValue={(selected) => (
@@ -148,11 +159,11 @@ class CreateRoom extends React.Component {
                             )}
                             MenuProps={this.MenuProps}
                             >
-                            {this.names.map((name) => (
+                            {users.length > 0 ? users.map((name) => (
                                 <MenuItem key={name} value={name} >
                                     {name}
                                 </MenuItem>
-                            ))}
+                            )) : []}
                             </Select>
                         </FormControl>
                     <br></br><br></br>
