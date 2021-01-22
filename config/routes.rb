@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       post '/login', to: 'auth#create'
       resources :chatrooms
       resources :messages, only: [:index, :create]
-      resources :users, only: [:create]
+      resources :users, only: [:index, :create]
       resources :chatrooms, only: [:index, :create, :show]
     end
   end
