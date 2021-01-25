@@ -21,6 +21,13 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def chatrooms
+    user = User.find(params[:id])
+    render json: {
+      chatrooms: user.chatrooms
+    }
+  end
+
   private
 
   def user_params
