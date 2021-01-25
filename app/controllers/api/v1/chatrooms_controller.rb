@@ -6,12 +6,15 @@ class Api::V1::ChatroomsController < ApplicationController
   end
 
   def create
-    chatroom = Chatroom.new(chatroom_params)
-
-    if chatroom.save
+    @chatroom = Chatroom.new(chatroom_params)
+    
+    if @chatroom.save
+      add_users_to_chatroom
+      binding.pry
+      
       render json: {
-        chatroom_id: chatroom.id,
-        chatroom_title: chatroom.title
+        chatroom_id: @chatroom.id,
+        chatroom_title: @chatroom.title
       }
     else
       render json: { message: 'Unable to create chatroom! Please try again.'}
@@ -28,6 +31,13 @@ class Api::V1::ChatroomsController < ApplicationController
 
   private
 
+  def add_users_to_chatroom
+    params[:users].each do |name|
+      user = User.find_by(username: name)
+      @chatroom.users << user
+    end
+  end
+  
   def chatroom_params
     params.require(:chatroom).permit(:title)
   end
