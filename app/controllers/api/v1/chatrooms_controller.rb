@@ -7,10 +7,9 @@ class Api::V1::ChatroomsController < ApplicationController
 
   def create
     @chatroom = Chatroom.new(chatroom_params)
-    
+
     if @chatroom.save
       add_users_to_chatroom
-      binding.pry
       
       render json: {
         chatroom_id: @chatroom.id,
