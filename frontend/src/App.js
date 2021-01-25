@@ -5,9 +5,10 @@ import Header from './components/Header';
 import Login from './components/Login';
 import Register from './components/Register';
 import { isAuthenticated } from './utils'
-import ChatLayout from './components/ChatRoom/ChatLayout';
 import CreateRoom from './components/ChatRoom/CreateRoom';
 import { APP_URL } from './constants';
+import ChatRooms from './components/ChatRoom/ChatRooms';
+
 class App extends React.Component {
 
     constructor(props) {
@@ -55,15 +56,13 @@ class App extends React.Component {
     }
 
     updateRooms = (data) => {
-        var rooms = this.state.allRooms;
-        
         this.setState({
             ...this.state,
-            allRooms: rooms.concat(data),
             currentRoom: {
                 chatroom: data.chatroom_id
             }
         })
+        return <Redirect to='/' />
     }
 
     handleLogout = () => {
@@ -74,6 +73,21 @@ class App extends React.Component {
         return <Redirect to='/' />
     }
 
+    //TODO
+    // getRoomData = (id) => {
+    //     fetch(`${APP_URL}/rooms/${id}`)
+    //     .then(response => response.json())
+    //     .then(result => {
+    //       this.setState({
+    //         currentRoom: {
+    //           room: result.data,
+    //           users: result.data.attributes.users,
+    //           messages: result.data.attributes.messages
+    //         }
+    //       })
+    //     })
+    //   }
+
     render() {
         return (
             <div>
@@ -81,9 +95,23 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path='/' render={(props) => {
                         return this.state.currentUser && isAuthenticated && this.state.currentRoom['room'] !== {} ? 
-                            <ChatLayout {...props} currentUser={this.state.currentUser} logout={this.state.handleLogout} /> :
+                            <ChatRooms {...props} currentUser={this.state.currentUser} /> :
                             <Login {...props} updateCurrentUser={this.updateCurrentUser} />
                     }} />
+                    {/* <Route exact path='/chatrooms/:id' render={ (props) => {
+                        return this.state.currentUser ?
+                        (<RoomShow
+                            {...props}
+                            cableApp={this.props.cableApp}
+                            getRoomData={this.getRoomData}
+                            updateApp={this.updateAppStateRoom}
+                            roomData={this.state.currentRoom}
+                            currentUser={this.state.currentUser}
+                        />
+                        ) : (
+                            <Redirect to='/rooms' />
+                        )
+                    }} /> */}
                     <Route exact path='/chatrooms/create' render={(props) => {
                         return this.state.currentUser && isAuthenticated ?
                             <CreateRoom {...props} currentUser={this.state.currentUser} updateRooms={this.updateRooms} /> :

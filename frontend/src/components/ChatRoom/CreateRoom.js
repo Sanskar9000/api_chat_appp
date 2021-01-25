@@ -79,7 +79,7 @@ class CreateRoom extends React.Component {
                 chatroom: {
                     title: this.state.roomName,
                 }, 
-                users: this.state.userName
+                users: [this.state.userName, this.props.currentUser]
             })
         })
         .then(response => response.json())
