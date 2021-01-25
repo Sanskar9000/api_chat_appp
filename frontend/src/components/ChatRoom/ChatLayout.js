@@ -36,7 +36,7 @@ const useStyles = makeStyles({
     }
 });
 
-const ChatLayout = () => {
+const ChatLayout = (props) => {
     const classes = useStyles();
     const [chatrooms, setChatrooms] = useState([]);
 
@@ -58,7 +58,7 @@ const ChatLayout = () => {
     return (
         <Fragment>
             {
-                (chatrooms.length !== 0) ? 
+                (chatrooms.length !== 0 && chatrooms.length !== undefined) ? 
                     (<div>
                         <Grid container>
                             <Grid item xs={12} >
@@ -68,17 +68,17 @@ const ChatLayout = () => {
                         <Grid container component={Paper} className={classes.chatSection}>
                             <Grid item xs={3} className={classes.borderRight500}>
                                 <List>
-                                    <ListItem button key="Gunjan">
+                                    <ListItem button key={props.currentUser.attributes.username}>
                                         <ListItemIcon>
-                                        <Avatar alt="Gunjan" src={avatar} />
+                                        <Avatar alt={props.currentUser.attributes.username} src={avatar} />
                                         </ListItemIcon>
-                                        <ListItemText primary="Gunjan"></ListItemText>
+                                        <ListItemText primary={props.currentUser.attributes.username}></ListItemText>
                                     </ListItem>
                                 </List>
                                 <Divider />
-                                <Grid item xs={12} style={{padding: '10px'}}>
-                                    <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
-                                </Grid>
+                                    <Grid item xs={12} style={{padding: '10px'}}>
+                                        <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
+                                    </Grid>
                                 <Divider />
                                 <List>
                                 {chatrooms.map((room) => {

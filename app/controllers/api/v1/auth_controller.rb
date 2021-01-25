@@ -5,11 +5,11 @@ class Api::V1::AuthController < ApplicationController
     if user && user.authenticate(auth_params[:password])
         payload = {'user_id': user.id}
         token = encode(payload)
+
         render json: {
-            user: user,
+            user: UserSerializer.new(user),
             token: token,
-            authenticated: true,
-            user_rooms: user.chatrooms
+            authenticated: true
         }
     else 
       render json: {
