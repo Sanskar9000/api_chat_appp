@@ -15,6 +15,7 @@ import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import avatar from './img/avatar.jpg';
 import { APP_URL } from '../../constants';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles({
     table: {
@@ -36,12 +37,13 @@ const useStyles = makeStyles({
     }
 });
 
-const ChatLayout = (props) => {
+const ChatRooms = (props) => {
+
     const classes = useStyles();
     const [chatrooms, setChatrooms] = useState([]);
 
     useEffect(() => {
-        fetch(`${APP_URL}/api/v1/chatrooms`, {
+        fetch(`${APP_URL}/api/v1/users/${props.currentUser.attributes.id}/chatrooms`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,8 +52,10 @@ const ChatLayout = (props) => {
         })
         .then(response => response.json())
         .then(data => {
-            var roomData = data;
-            setChatrooms(roomData);
+            if(data.chatrooms.length > 0 && data.chatrooms !== undefined) {
+                var roomData = data;
+                setChatrooms(roomData.chatrooms);
+            }
         })
     }, [])
 
@@ -66,7 +70,7 @@ const ChatLayout = (props) => {
                             </Grid>
                         </Grid>
                         <Grid container component={Paper} className={classes.chatSection}>
-                            <Grid item xs={3} className={classes.borderRight500}>
+                            <Grid item xs={12} className={classes.borderRight500}>
                                 <List>
                                     <ListItem button key={props.currentUser.attributes.username}>
                                         <ListItemIcon>
@@ -83,47 +87,20 @@ const ChatLayout = (props) => {
                                 <List>
                                 {chatrooms.map((room) => {
                                     return (    
-                                    <ListItem button key={room.id}>
-                                        <ListItemIcon>
-                                            <Avatar alt={room.title} src={room.title} />
-                                        </ListItemIcon>
-                                        <ListItemText primary={room.title}>{room.title}</ListItemText>
-                                    </ListItem>)
+                                        <div>
+                                            <ListItem button key={room.id}>
+                                                <ListItemIcon>
+                                                    <Avatar alt={room.title} src={room.title} />
+                                                </ListItemIcon>
+                                                <ListItemText primary={room.title}>{room.title}</ListItemText>
+                                                <Button variant="contained" color="primary">
+                                                    Enter Room
+                                                </Button>
+                                            </ListItem>
+                                        </div>
+                                    )
                                 })}
                                 </List>
-                            </Grid>
-                            <Grid item xs={9}>
-                                <List className={classes.messageArea}>
-                                    <ListItem key="1">
-                                        <Grid container>
-                                            <Grid item xs={12}>
-                                                <ListItemText align="right" primary="Hey man, What's up ?"></ListItemText>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <ListItemText align="right" secondary="09:30"></ListItemText>
-                                            </Grid>
-                                        </Grid>
-                                    </ListItem>
-                                    <ListItem key="2">
-                                        <Grid container>
-                                            <Grid item xs={12}>
-                                                <ListItemText align="left" primary="Hey, Iam Good! What about you ?"></ListItemText>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <ListItemText align="left" secondary="09:31"></ListItemText>
-                                            </Grid>
-                                        </Grid>
-                                    </ListItem>
-                                </List>
-                                <Divider />
-                                <Grid container style={{padding: '20px'}}>
-                                    <Grid item xs={11}>
-                                        <TextField id="outlined-basic-email" label="Type Something" fullWidth />
-                                    </Grid>
-                                    <Grid xs={1} align="right">
-                                        <Fab color="primary" aria-label="add"><SendIcon /></Fab>
-                                    </Grid>
-                                </Grid>
                             </Grid>
                         </Grid>
                     </div>) :
@@ -135,19 +112,4 @@ const ChatLayout = (props) => {
     );  
 }
 
-export default ChatLayout;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default ChatRooms;
