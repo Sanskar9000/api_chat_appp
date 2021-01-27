@@ -12,7 +12,7 @@ class Api::V1::UsersController < ApplicationController
       payload = {'user_id': user.id}
       token = encode(payload)
       render json: {
-        user: user,
+        user: UserSerializer.new(user),
         token: token,
         authenticated: true,
       }

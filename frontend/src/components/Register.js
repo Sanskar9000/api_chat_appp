@@ -40,10 +40,10 @@ class Register extends React.Component {
             }})
         })
         .then(response => response.json())
-        .then(data => {
-            if (data.authenticated) {
-                localStorage.setItem('jwt_token', data.token)
-                this.props.updateCurrentUser(data.user)
+        .then(result => {
+            if (result.authenticated) {
+                localStorage.setItem('jwt_token', result.token)
+                this.props.updateCurrentUser(result.user.data)
             } else {
                 alert('User Registration was not successfull!');
             } 
