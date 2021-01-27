@@ -16,6 +16,7 @@ import SendIcon from '@material-ui/icons/Send';
 import avatar from './img/avatar.jpg';
 import { APP_URL } from '../../constants';
 import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
     table: {
@@ -41,6 +42,7 @@ const ChatRooms = (props) => {
 
     const classes = useStyles();
     const [chatrooms, setChatrooms] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         console.log('currentuser ======>', props.currentUser)
@@ -61,6 +63,10 @@ const ChatRooms = (props) => {
             }
         })
     }, [])
+
+    const handleClick = (chatroom) => {
+        history.push(`/chatroom/${chatroom.id}`)
+    }
 
     return (
         <Fragment>
@@ -96,7 +102,7 @@ const ChatRooms = (props) => {
                                                     <Avatar alt={room.title} src={room.title} />
                                                 </ListItemIcon>
                                                 <ListItemText primary={room.title}>{room.title}</ListItemText>
-                                                <Button variant="contained" color="primary">
+                                                <Button variant="contained" color="primary" onClick={() => handleClick(room)}>
                                                     Enter Room
                                                 </Button>
                                             </ListItem>
