@@ -43,7 +43,9 @@ const ChatRooms = (props) => {
     const [chatrooms, setChatrooms] = useState([]);
 
     useEffect(() => {
-        fetch(`${APP_URL}/api/v1/users/${props.currentUser.attributes.id}/chatrooms`, {
+        console.log('currentuser ======>', props.currentUser)
+        const { id } =  props.currentUser.attributes;
+        fetch(`${APP_URL}/api/v1/users/${id}/chatrooms`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -52,9 +54,10 @@ const ChatRooms = (props) => {
         })
         .then(response => response.json())
         .then(data => {
-            if(data.chatrooms.length > 0 && data.chatrooms !== undefined) {
-                var roomData = data;
-                setChatrooms(roomData.chatrooms);
+            var chatrooms = data.chatrooms;
+            if(chatrooms.length > 0 && chatrooms !== undefined) {
+                setChatrooms(chatrooms);
+                props.updateCurrentUserRooms(data);
             }
         })
     }, [])

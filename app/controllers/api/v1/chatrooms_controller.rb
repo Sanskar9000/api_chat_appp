@@ -12,8 +12,8 @@ class Api::V1::ChatroomsController < ApplicationController
       add_users_to_chatroom
       
       render json: {
-        chatroom_id: @chatroom.id,
-        chatroom_title: @chatroom.title
+        chatroom: @chatroom,
+        users: @chatroom.users
       }
     else
       render json: { message: 'Unable to create chatroom! Please try again.'}

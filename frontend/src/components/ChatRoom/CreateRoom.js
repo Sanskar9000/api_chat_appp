@@ -36,8 +36,6 @@ const styles = (theme) => ({
         marginTop: theme.spacing(3),
     },
 });
-
-
 class CreateRoom extends React.Component {
 
     constructor(props) {
@@ -79,7 +77,7 @@ class CreateRoom extends React.Component {
                 chatroom: {
                     title: this.state.roomName,
                 }, 
-                users: [this.state.userName, this.props.currentUser]
+                users: this.state.userName.concat(this.props.currentUser.attributes.username)
             })
         })
         .then(response => response.json())

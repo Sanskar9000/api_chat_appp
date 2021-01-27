@@ -15,37 +15,13 @@ class App extends React.Component {
         super(props)
         this.state = {
             currentUser: null,
-            allRooms: [],
+            currentUserRooms: [],
             currentRoom: {
                 chatroom: [], 
                 users: [],
                 messages: []
             }
         }
-    }
-
-    componentDidMount() {
-        const { currentRoom: { chatroom } } = this.state;
-
-        fetch(`${APP_URL}/api/v1/chatrooms`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            } 
-        })
-        .then(response => response.json())
-        .then(data => {
-            var roomData = data;
-            this.setState({
-                allRooms: roomData
-            })
-        })
-
-        if(chatroom !== []) {
-            <Redirect to='/' />
-        }
-
     }
 
     updateCurrentUser = (data) => {
@@ -56,13 +32,21 @@ class App extends React.Component {
     }
 
     updateRooms = (data) => {
+        const userrooms = this.state.currentUserRooms;
         this.setState({
             ...this.state,
             currentRoom: {
-                chatroom: data.chatroom_id
-            }
+                chatroom: data.chatroom,
+                users: data.users
+            },
+            currentUserRooms: userrooms.concat(data.chatroom)
         })
-        return <Redirect to='/' />
+    }
+
+    updateCurrentUserRooms = (data) => {
+        this.setState({
+            currentUserRooms: data.chatrooms
+        })
     }
 
     handleLogout = () => {
@@ -73,20 +57,6 @@ class App extends React.Component {
         return <Redirect to='/' />
     }
 
-    //TODO
-    // getRoomData = (id) => {
-    //     fetch(`${APP_URL}/rooms/${id}`)
-    //     .then(response => response.json())
-    //     .then(result => {
-    //       this.setState({
-    //         currentRoom: {
-    //           room: result.data,
-    //           users: result.data.attributes.users,
-    //           messages: result.data.attributes.messages
-    //         }
-    //       })
-    //     })
-    //   }
 
     render() {
         return (
@@ -95,26 +65,12 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path='/' render={(props) => {
                         return this.state.currentUser && isAuthenticated && this.state.currentRoom['room'] !== {} ? 
-                            <ChatRooms {...props} currentUser={this.state.currentUser} /> :
+                            <ChatRooms {...props} updateCurrentUserRooms={this.updateCurrentUserRooms} currentUser={this.state.currentUser} /> :
                             <Login {...props} updateCurrentUser={this.updateCurrentUser} />
                     }} />
-                    {/* <Route exact path='/chatrooms/:id' render={ (props) => {
-                        return this.state.currentUser ?
-                        (<RoomShow
-                            {...props}
-                            cableApp={this.props.cableApp}
-                            getRoomData={this.getRoomData}
-                            updateApp={this.updateAppStateRoom}
-                            roomData={this.state.currentRoom}
-                            currentUser={this.state.currentUser}
-                        />
-                        ) : (
-                            <Redirect to='/rooms' />
-                        )
-                    }} /> */}
                     <Route exact path='/chatrooms/create' render={(props) => {
                         return this.state.currentUser && isAuthenticated ?
-                            <CreateRoom {...props} currentUser={this.state.currentUser} updateRooms={this.updateRooms} /> :
+                            <CreateRoom {...props} currentUser={this.state.currentUser} updateRooms={this.updateRooms} currentRoom={this.state.currentRoom['chatroom']} /> :
                             <Login {...props} updateCurrentUser={this.updateCurrentUser} />
                     }} />
                     <Route exact path='/auth/login' render={(props) => {
