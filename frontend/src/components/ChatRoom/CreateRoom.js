@@ -36,6 +36,7 @@ const styles = (theme) => ({
         marginTop: theme.spacing(3),
     },
 });
+
 class CreateRoom extends React.Component {
 
     constructor(props) {
@@ -83,6 +84,7 @@ class CreateRoom extends React.Component {
         .then(response => response.json())
         .then(data => {
             this.props.updateRooms(data)
+            this.props.history.push('/')
         })
     }   
         
