@@ -15,6 +15,8 @@ import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import avatar from './img/avatar.jpg';
 import { APP_URL } from '../../constants';
+import ChatMessage from './ChatMessage';
+import RoomWebSocket from './RoomWebSocket';
 
 const useStyles = makeStyles({
     table: {
@@ -37,10 +39,38 @@ const useStyles = makeStyles({
 });
 
 
-const ChatRoomShow = () => {
-
-    const classes = useStyles();
+const ChatRoomShow = (props) => {
+    console.log("currentRoom ===> ", props.currentRoom)   
+    console.log("cableApp ===> ", props.cableApp)   
+    console.log("roomData ===> ", props.roomData)
     
+    const classes = useStyles();
+    const [messageText, setMessageText] = useState([]);
+
+    const handleChange = (e) => {
+        e.preventDefault()
+        setMessageText(e.target.value);
+    }   
+    
+    const handleSendMessage = () => {
+        var message = document.getElementById('messages');
+        debugger
+        message.innerText = messageText;
+    }
+
+    const whichUser = (message) => {
+        debugger
+        const user = props.roomData.users.data.find(user => parseInt(user.id) === message.user_id )
+        return user
+    }
+
+    const displayMessages = (messages) => {
+        return messages.map(message => {
+            const user = this.whichUser(message)
+            return <ChatMessage key={message.id} message={message} user={user} currentUser={props.currentUser}/>
+        }) 
+    }
+
     return(
         <Fragment>
             <div>
@@ -49,10 +79,17 @@ const ChatRoomShow = () => {
                         <ListItem key="1">
                             <Grid container>
                                 <Grid item xs={12}>
-                                    <div id='messages'>
-                                        <h1>dfbgjhb</h1>
-                                        <ListItemText align="right" primary="Hey man, What's up ?"></ListItemText>
+                                    <div id='chat-feed'>
+                                        <h3>Chat Feed:</h3>
+                                        <div id='messages'>
+                                            { props.roomData.messages.length > 0 ? (
+                                                this.displayMessages(props.roomData.messages)
+                                            ) : (
+                                                <h3>This room has no messages yet - be the first to post!</h3>
+                                            ) }
+                                        </div>
                                     </div>
+                                    <ListItemText align="right" primary="Hey man, What's up ?"></ListItemText>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <ListItemText align="right" secondary="09:30"></ListItemText>
@@ -73,13 +110,20 @@ const ChatRoomShow = () => {
                     <Divider />
                     <Grid container style={{padding: '20px'}}>
                         <Grid item xs={11}>
-                            <TextField id="outlined-basic-email" label="Type Something" fullWidth />
+                            <TextField id="outlined-basic-email" label="Type Something" value={messageText} onChange={handleChange} fullWidth />
                         </Grid>
                         <Grid xs={1} align="right">
-                            <Fab color="primary" aria-label="add"><SendIcon /></Fab>
+                            <Fab color="primary" aria-label="add" onClick={handleSendMessage}><SendIcon /></Fab>
                         </Grid>
                     </Grid>
                 </Grid>
+
+                <RoomWebSocket
+                    cableApp={props.cableApp}
+                    roomData={props.roomData}
+                    getRoomData={props.getRoomData}
+                    updateApp={props.updateApp}
+                />
             </div>
         </Fragment>
     )
