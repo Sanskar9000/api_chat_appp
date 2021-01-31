@@ -22,10 +22,7 @@ class Api::V1::ChatroomsController < ApplicationController
 
   def show
     chatroom = Chatroom.find(params[:id])
-    render json: {
-      chatroom_id: chatroom.id,
-      chatroom_title: chatroom.title
-    }  
+    render json: ChatroomSerializer.new(chatroom)
   end
 
   private

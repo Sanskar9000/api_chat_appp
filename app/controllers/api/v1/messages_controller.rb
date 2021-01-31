@@ -8,7 +8,7 @@ class MessagesController < ApplicationController
       message = Message.new(message_params)
       room = Room.find(message_params[:room_id])
       if message.save
-          RoomsChannel.broadcast_to(room, {
+          ChatroomsChannel.broadcast_to(room, {
               room: room,
               users: room.users,
               messages: room.messages
