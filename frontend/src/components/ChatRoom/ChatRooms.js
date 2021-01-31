@@ -118,7 +118,7 @@ const ChatRooms = (props) => {
                     </div>)
             }
         </Fragment>
-    );  
+    )  
 }
 
 export default ChatRooms;
