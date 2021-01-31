@@ -1,6 +1,5 @@
 class ChatroomsChannel < ApplicationCable::Channel
   def subscribed
-    binding.pry
     @chatroom = Chatroom.find(params[:room])
     stream_for @chatroom
   end

@@ -1,25 +1,25 @@
-class MessagesController < ApplicationController
+class Api::V1::MessagesController < ApplicationController
   def index
-      messages = Message.all
-      render json: messages
+    messages = Message.all
+    render json: messages
   end
 
   def create
-      message = Message.new(message_params)
-      room = Room.find(message_params[:room_id])
-      if message.save
-          ChatroomsChannel.broadcast_to(room, {
-              room: room,
-              users: room.users,
-              messages: room.messages
-          })
-      end
-      render json: message
+    message = Message.new(message_params)
+    chatroom = Chatroom.find(message_params[:chatroom_id])
+    if message.save
+        ChatroomsChannel.broadcast_to(chatroom, {
+            chatroom: chatroom,
+            users: chatroom.users,
+            messages: chatroom.messages
+        })
+    end
+    render json: message
   end
 
   private
 
   def message_params
-      params.require(:message).permit(:content, :user_id, :room_id)
+      params.require(:message).permit(:body, :user_id, :chatroom_id)
   end
 end
