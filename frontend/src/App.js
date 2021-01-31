@@ -46,6 +46,7 @@ class App extends React.Component {
 
     updateCurrentUserRooms = (data) => {
         this.setState({
+            ...this.state,
             currentUserRooms: data.chatrooms
         })
     }
@@ -60,9 +61,10 @@ class App extends React.Component {
 
     updateAppStateRoom = (newRoom) => {
         this.setState({
+            ...this.state,
             currentRoom: {
-                chatroom: newRoom.room.data,
-                users: newRoom.users,
+                chatroom: this.state.currentRoom.chatroom,
+                users: this.state.currentRoom.users,
                 messages: newRoom.messages
             }
         })
@@ -99,7 +101,7 @@ class App extends React.Component {
                             <Login {...props} updateCurrentUser={this.updateCurrentUser} />
                     }} />
                     <Route exact path='/chatroom/:id' render={(props) => {
-                        return this.state.currentUser ?
+                        return (this.state.currentUser && this.getRoomData) ?
                                 <ChatRoomShow
                                     {...props}
                                     cableApp={this.props.cableApp}
