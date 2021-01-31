@@ -40,7 +40,7 @@ class App extends React.Component {
                 chatroom: data.chatroom,
                 users: data.users
             },
-            currentUserRooms: userrooms.concat(data.chatroom)
+            currentUserRooms: userrooms.includes(data.chatroom) ? userrooms : userrooms.concat(data.chatroom)
         })
     }
 
@@ -56,6 +56,30 @@ class App extends React.Component {
           currentUser: null
         })
         return <Redirect to='/' />
+    }
+
+    updateAppStateRoom = (newRoom) => {
+        this.setState({
+            currentRoom: {
+                chatroom: newRoom.room.data,
+                users: newRoom.users,
+                messages: newRoom.messages
+            }
+        })
+    }
+      
+    getRoomData = (id) => {
+        fetch(`${APP_URL}/api/v1/chatrooms/${id}`)
+        .then(response => response.json())
+        .then(result => {
+            this.setState({
+                currentRoom: {
+                    chatroom: result.data,
+                    users: result.data.attributes.users,
+                    messages: result.data.attributes.messages
+                }
+            })
+        })
     }
 
 
@@ -80,6 +104,9 @@ class App extends React.Component {
                                     {...props}
                                     cableApp={this.props.cableApp}
                                     currentUser={this.state.currentUser}
+                                    getRoomData={this.getRoomData}
+                                    roomData={this.state.currentRoom}
+                                    updateApp={this.updateAppStateRoom}
                                 /> : 
                                 <Login {...props} updateCurrentUser={this.updateCurrentUser} />
                     }} />
