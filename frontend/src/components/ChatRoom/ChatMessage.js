@@ -11,6 +11,7 @@ const ChatMessage = (props) => {
     
     return (
         <div id="chat-message" className={whichUser()}>
+            <span>{props.user.attributes.username}</span>
             <h4>{props.message.body}</h4>
         </div>     
     )
