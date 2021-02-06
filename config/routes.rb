@@ -5,11 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       post '/login', to: 'auth#create'
       resources :messages, only: [:index, :create]
-      resources :users, only: [:index, :create] do
-        member do
-          get 'chatrooms'
-        end
-      end
+      resources :users, only: [:index, :create]
       resources :chatrooms, only: [:index, :create, :show]
     end
   end
