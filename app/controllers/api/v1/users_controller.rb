@@ -1,4 +1,5 @@
 class Api::V1::UsersController < ApplicationController
+  before_action :authenticate_user, only: :index
 
   def index
     users = User.all 
@@ -21,17 +22,16 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def chatrooms
-    user = User.find(params[:id])
-    render json: {
-      chatrooms: user.chatrooms
-    }
-  end
-
   private
 
   def user_params
     params.require(:user).permit(:username, :password, :password_confirmation)
+  end
+
+  def authenticate_user
+    decoded_token = decode(request.headers['token'])
+    @user = User.find(decoded_token["user_id"])
+    render json: { message: 'Un-Authenticated Request', authenticated: false } unless @user
   end
 
 end

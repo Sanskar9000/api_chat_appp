@@ -1,16 +1,18 @@
 class Api::V1::ChatroomsController < ApplicationController
-  
+  before_action :authenticate_user
+
   def index
-    chatrooms = Chatroom.all
-    render json: chatrooms
+    chatrooms = @user.chatrooms.uniq
+    render json: {
+      chatrooms: chatrooms
+    }
   end
 
   def create
-    @chatroom = Chatroom.new(chatroom_params)
+    @chatroom = @user.chatrooms.new(chatroom_params)
 
     if @chatroom.save
       add_users_to_chatroom
-      
       render json: {
         chatroom: @chatroom,
         users: @chatroom.users
@@ -21,7 +23,7 @@ class Api::V1::ChatroomsController < ApplicationController
   end
 
   def show
-    chatroom = Chatroom.find(params[:id])
+    chatroom = @user.chatrooms.find(params[:id])
     render json: ChatroomSerializer.new(chatroom)
   end
 
@@ -30,11 +32,17 @@ class Api::V1::ChatroomsController < ApplicationController
   def add_users_to_chatroom
     params[:users].each do |name|
       user = User.find_by(username: name)
-      @chatroom.users << user
+      (@chatroom.users << user) unless @chatroom.users.include?(user) 
     end
   end
   
   def chatroom_params
     params.require(:chatroom).permit(:title)
+  end
+
+  def authenticate_user
+    decoded_token = decode(request.headers['token'])
+    @user = User.find(decoded_token["user_id"])
+    render json: { message: 'Un-Authenticated Request', authenticated: false } unless @user
   end
 end

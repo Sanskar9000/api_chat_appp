@@ -44,11 +44,12 @@ const ChatRooms = (props) => {
     useEffect(() => {
         console.log('currentuser ======>', props.currentUser)
         const { id } =  props.currentUser.attributes;
-        fetch(`${APP_URL}/api/v1/users/${id}/chatrooms`, {
+        fetch(`${APP_URL}/api/v1/chatrooms`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'token': localStorage.getItem("jwt_token")
             } 
         })
         .then(response => response.json())

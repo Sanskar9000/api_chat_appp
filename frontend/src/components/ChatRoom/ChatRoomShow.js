@@ -53,7 +53,6 @@ class ChatRoomShow extends Component {
         
         const message = {
             body: this.state.messageText,
-            user_id: this.props.currentUser.id,
             chatroom_id: this.props.roomData.chatroom.id
         }
 
@@ -61,9 +60,13 @@ class ChatRoomShow extends Component {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Accept: "application/json"
+                "Accept": "application/json",
+                'token': localStorage.getItem("jwt_token")
             },
-            body: JSON.stringify({message: message})
+            body: JSON.stringify({
+                message: message, 
+                user_id: this.props.currentUser.attributes.id
+            })
         })
         .then(resp => resp.json())
         .then(result => {
@@ -89,7 +92,7 @@ class ChatRoomShow extends Component {
 
     render() {
         const { classes } = this.props;
-
+        console.log('messages ==>', this.props.roomData.messages)
         return(
             <Fragment>
                 <div>
@@ -101,7 +104,7 @@ class ChatRoomShow extends Component {
                                         <div id='chat-feed'>
                                             <h3>Chat Feed:</h3>
                                             <div id='messages'>
-                                                { this.props.roomData.messages.length > 0 ? (
+                                                { this.props.roomData.messages !== undefined && this.props.roomData.messages.length > 0 ? (
                                                     this.displayMessages(this.props.roomData.messages)
                                                 ) : (
                                                     <h3>This room has no messages yet - be the first to post!</h3>

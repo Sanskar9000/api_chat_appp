@@ -54,7 +54,8 @@ class CreateRoom extends React.Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'token': localStorage.getItem("jwt_token")
             }
         })
         .then(response => response.json())
@@ -72,13 +73,14 @@ class CreateRoom extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'token': localStorage.getItem("jwt_token")
             },
             body: JSON.stringify({
                 chatroom: {
                     title: this.state.roomName,
                 }, 
-                users: this.state.userName.concat(this.props.currentUser.attributes.username)
+                users: this.state.userName.concat(this.props.currentUser.attributes.username),
             })
         })
         .then(response => response.json())

@@ -31,7 +31,8 @@ class Register extends React.Component {
             "method": "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'token': localStorage.getItem("jwt_token")
             },
             "body": JSON.stringify({ "user": {
                 "username": this.state.username,

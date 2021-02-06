@@ -71,16 +71,27 @@ class App extends React.Component {
     }
       
     getRoomData = (id) => {
-        fetch(`${APP_URL}/api/v1/chatrooms/${id}`)
+        fetch(`${APP_URL}/api/v1/chatrooms/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'token': localStorage.getItem("jwt_token")
+            }
+        })
         .then(response => response.json())
         .then(result => {
-            this.setState({
-                currentRoom: {
-                    chatroom: result.data,
-                    users: result.data.attributes.users,
-                    messages: result.data.attributes.messages
-                }
-            })
+            if(result.data){
+                this.setState({
+                    currentRoom: {
+                        chatroom: result.data,
+                        users: result.data.attributes.users,
+                        messages: result.data.attributes.messages
+                    }
+                })
+            } else {
+                alert("Chatroom Not found!")
+            }
         })
     }
 
