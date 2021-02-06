@@ -86,7 +86,11 @@ class ChatRoomShow extends Component {
     displayMessages = (messages) => {
         return messages.map(message => {
             const user = this.whichUser(message)
-            return <ChatMessage key={message.id} message={message} user={user} currentUser={this.props.currentUser}/>
+            return (
+                message.body !== null ? 
+                    <ChatMessage key={message.id} message={message} user={user} currentUser={this.props.currentUser}/> :
+                    <div></div>
+            )
         }) 
     }
 
