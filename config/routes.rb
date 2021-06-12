@@ -9,5 +9,10 @@ Rails.application.routes.draw do
       resources :chatrooms, only: [:index, :create, :show]
     end
   end
+
+  get '*path', to: 'application#frontend_path', constraints: lambda { |request|
+    !request.xhr? && request.format.html?
+  }
+
   mount ActionCable.server => './cable' 
 end

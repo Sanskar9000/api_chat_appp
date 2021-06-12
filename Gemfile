@@ -24,6 +24,8 @@ gem 'fast_jsonapi'
 # Use jwt for token authentication
 gem 'jwt'
 
+gem 'foreman'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

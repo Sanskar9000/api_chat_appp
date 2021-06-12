@@ -1,0 +1,28 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "This README would normally document whatever steps are necessary to get the application up and running.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd frontend && yarn start",
+    "build": "cd frontend && yarn build",
+    "install": "cd frontend && yarn"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/gsolanki1/chat-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/gsolanki1/chat-app/issues"
+  },
+  "homepage": "https://gitlab.com/gsolanki1/chat-app#readme"
+}
