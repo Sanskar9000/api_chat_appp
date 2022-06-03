@@ -6,13 +6,24 @@ class Api::V1::MessagesController < ApplicationController
     
     if message.save
       chatroom = message.chatroom
-      ChatroomsChannel.broadcast_to(chatroom, {
-          chatroom: chatroom,
-          users: chatroom.users,
-          messages: chatroom.messages
-      })
+      @chatroom = message.chatroom
+      message  = @chatroom.messages.last if @chatroom.messages
+      ChatroomsChannel.broadcast_to(@chatroom, {chatroom: @chatroom, users: @chatroom.users.uniq, message: message})
+      # ChatroomsChannel.broadcast_to(chatroom, {chatroom: chatroom,users: chatroom.users,messages: chatroom.messages})
     end
     render json: message
+  end
+
+  def index
+    message = @user.messages.last
+    
+    if message
+      chatroom = message.chatroom
+      @chatroom = message.chatroom
+      message  = @chatroom.messages.last if @chatroom.messages
+      render json: {chatroom: @chatroom, users: @chatroom.users.uniq, message: message}
+
+    end
   end
 
   private
@@ -22,7 +33,7 @@ class Api::V1::MessagesController < ApplicationController
   end
 
   def authenticate_user
-    @user = User.find(params[:user_id])
+    @user = User.find(1)
     render json: { message: 'Un-Authenticated Request', authenticated: false } unless @user
   end
 end

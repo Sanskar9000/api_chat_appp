@@ -1,5 +1,5 @@
 class Api::V1::ChatroomsController < ApplicationController
-  before_action :authenticate_user
+  # before_action :authenticate_user
 
   def index
     chatrooms = @user.chatrooms.uniq
@@ -23,7 +23,13 @@ class Api::V1::ChatroomsController < ApplicationController
   end
 
   def show
+    @user = User.first
     chatroom = @user.chatrooms.find(params[:id])
+    ChatroomsChannel.broadcast_to(@chatroom, {
+      chatroom: chatroom,
+      users: chatroom.users,
+      messages: chatroom.messages
+  })
     render json: ChatroomSerializer.new(chatroom)
   end
 

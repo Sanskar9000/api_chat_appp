@@ -49,4 +49,8 @@ Rails.application.configure do
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  config.hosts << "e8ae-2401-4900-1c19-a12a-5563-1a83-8ba3-b8da.ngrok.io"
+
+  config.action_cable.url = 'wss://e8ae-2401-4900-1c19-a12a-5563-1a83-8ba3-b8da.ngrok.io/cable'
+  config.action_cable.allowed_request_origins = [ 'https://www.piesocket.com','chrome://new-tab-page', 'http://127.0.0.1:5500' ]
 end

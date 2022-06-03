@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :messages, only: [:index, :create]
       resources :users, only: [:index, :create]
       resources :chatrooms, only: [:index, :create, :show]
+      resources :private_messages, only: [:index, :create, :show]
     end
   end
 

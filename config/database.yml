@@ -10,12 +10,12 @@ default: &default
   encoding: unicode
   host: localhost
   pool: 5
-  username: postgres
-  password: postgres
+  username: rails
+  password: rails
 
 development:
   <<: *default
-  database: chat-db-development
+  database: chat_db_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
